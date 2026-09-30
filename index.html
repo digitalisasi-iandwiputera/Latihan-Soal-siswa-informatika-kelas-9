@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LATIHAN PEMAHAMAN MATERI INFORMATIKA KELAS 9 - Oleh Bapak Ian Dwi Putera,S.Pd</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-emerald-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-emerald-600 selection:text-white">
+
+    <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center space-x-3">
+                <div class="bg-emerald-900 p-2.5 rounded-xl border border-emerald-600 shadow-inner">
+                    <svg class="w-6 h-6 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-tight">Latihan Pemahaman Informatika Kelas 9</h1>
+                    <p class="text-xs sm:text-sm text-emerald-200 font-medium">Oleh Bapak Ian Dwi Putera, S.Pd</p>
+                </div>
+            </div>
+            <div id="quiz-progress-badge" class="hidden bg-emerald-900 border border-emerald-700 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide text-emerald-100">
+                Soal <span id="current-q-num">1</span> dari <span id="total-q-num">20</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 py-8 w-full flex-grow">
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 sm:p-10 fade-in text-center">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-inner">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-3">Selamat Datang di Latihan Mandiri Informatika kelas 9 SMPN 2 BANAWA.</h2>
+            <p class="text-slate-600 text-sm sm:text-base max-w-xl mx-auto mb-8 leading-relaxed">
+                Uji kemampuan dan pemahaman konsep informatikamu ! Setiap jawaban akan disertai dengan ulasan dan alasan yang jelas untuk memperkuat pemahamanmu!
+            </p>
+            <button onclick="startQuiz()" class="w-full sm:w-auto px-8 py-4 bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-white font-bold rounded-xl shadow-lg hover:shadow-emerald-200 transition-all transform hover:-translate-y-0.5 text-base cursor-pointer">
+                Mulai Kerjakan Soal Sekarang 🚀
+            </button>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="hidden space-y-6 fade-in">
+            <!-- Question Card -->
+            <div class="bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 sm:p-8">
+                <div class="flex justify-between items-center mb-4">
+                    <span id="question-category" class="text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">Kategori Soal</span>
+                    <span class="text-xs font-semibold text-slate-400">Pertanyaan <span id="q-counter">1</span>/20</span>
+                </div>
+                <h3 id="question-text" class="text-lg sm:text-xl font-bold text-slate-900 mb-6 leading-snug"></h3>
+                
+                <!-- Options List -->
+                <div id="options-list" class="space-y-3">
+                    <!-- Dynamic Options -->
+                </div>
+            </div>
+
+            <!-- Feedback Box -->
+            <div id="feedback-box" class="hidden bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 sm:p-8 fade-in">
+                <div id="feedback-header" class="flex items-center space-x-3 mb-3">
+                    <!-- Icon & Result Title -->
+                </div>
+                <p id="feedback-text" class="text-sm sm:text-base text-slate-700 leading-relaxed mb-6"></p>
+                <button onclick="nextQuestion()" class="w-full sm:w-auto px-6 py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl shadow-md transition-all text-sm cursor-pointer">
+                    Lanjut ke Pertanyaan Berikutnya ➔
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 sm:p-10 fade-in text-center">
+            <div class="w-20 h-20 bg-emerald-100 text-emerald-700 rounded-3xl flex items-center justify-center mx-auto mb-5 shadow-inner">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Latihan Selesai! 🎉</h2>
+            <p class="text-slate-600 text-sm sm:text-base mb-6">Hebat! Kamu telah menyelesaikan seluruh rangkaian latihan pemahaman materi informatika kelas 9.</p>
+            
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 max-w-sm mx-auto mb-8">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 block mb-1">Skor Akhir Kamu</span>
+                <div class="text-4xl sm:text-5xl font-black text-emerald-800">
+                    <span id="final-score">0</span> <span class="text-xl text-emerald-400 font-semibold">/ 20</span>
+                </div>
+                <p id="score-message" class="text-xs sm:text-sm text-slate-600 mt-2 font-medium"></p>
+            </div>
+
+            <button onclick="restartQuiz()" class="px-8 py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl shadow-md transition-all text-sm cursor-pointer">
+                Ulangi Latihan 🔄
+            </button>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-emerald-100 py-4 text-center text-xs text-slate-500 mt-8">
+        <p>Latihan Pemahaman TIK & Berpikir Komputasional Kelas 9 • Dikembangkan untuk Pembelajaran Interaktif</p>
+    </footer>
+
+    <script>
+        const quizData = [
+            {
+                category: "Berpikir Komputasional & Masa Depan",
+                question: "Banyak orang mengira mata pelajaran Informatika di sekolah hanya sekadar belajar komputer biasa. Mengapa keterampilan berpikir secara informatika (berpikir komputasional) dan penguasaan teknologi saat ini menjadi modal yang sangat penting untuk masa depan pelajar?",
+                options: [
+                    "Karena siswa hanya dituntut menghafal nama-nama komponen komputer lama.",
+                    "Karena berpikir komputasional melatih kemampuan memecahkan masalah rumit secara logis, sistematis, dan adaptif di era digital.",
+                    "Karena komputer sudah bisa menggantikan seluruh peran manusia dalam berpikir.",
+                    "Karena pelajaran ini tidak ada hubungannya dengan pekerjaan di masa depan."
+                ],
+                correct: 1,
+                explanation: "Informatika bukan sekadar memakai komputer, melainkan melatih cara berpikir logis dan terstruktur (berpikir komputasional) untuk memecahkan masalah kompleks di berbagai bidang modern."
+            },
+            {
+                category: "Efisiensi di Era Modern",
+                question: "Tanpa disadari, setiap hari kita menggunakan teknologi seperti pesan makanan online, Google Maps, hingga QRIS. Bagaimana ilmu informatika membuat aktivitas manusia di era modern menjadi jauh lebih cepat, hemat waktu, dan efisien?",
+                options: [
+                    "Dengan mengotomatisasi proses pencarian jalur, transaksi, dan layanan secara instan melalui sistem digital.",
+                    "Dengan membuat segala sesuatu menjadi lebih lambat karena harus menunggu jaringan internet.",
+                    "Dengan menghapus kebutuhan manusia terhadap teknologi selamanya.",
+                    "Dengan menaikkan biaya dan tenaga kerja secara drastis."
+                ],
+                correct: 0,
+                explanation: "Teknologi dan ilmu informatika memangkas birokrasi manual dan jarak melalui algoritma cerdas, sehingga transaksi atau navigasi dapat diselesaikan dalam hitungan detik."
+            },
+            {
+                category: "Aplikasi Perkantoran (Word)",
+                question: "Perhatikan kegiatan berikut: (1) Mengetik surat resmi dinas sekolah, (2) Membuat laporan praktikum lab, (3) Menyusun proposal kegiatan pentas seni, (4) Mengedit video dokumentasi. Kegiatan yang dapat dilakukan menggunakan aplikasi pengolah kata seperti Microsoft Word adalah ....",
+                options: [
+                    "(1), (2), dan (4)",
+                    "(2), (3), dan (4)",
+                    "(1), (2), dan (3)",
+                    "Semua kegiatan benar"
+                ],
+                correct: 2,
+                explanation: "Microsoft Word dirancang khusus untuk pengolahan dokumen teks seperti surat, laporan, dan proposal. Sedangkan mengedit video memerlukan aplikasi khusus video editor."
+            },
+            {
+                category: "Aturan Rumus Excel",
+                question: "Perhatikan aturan penulisan operasi hitung matematika di Microsoft Excel berikut: (1) Menggunakan simbol bintang (*) untuk perkalian, (2) Menggunakan simbol garis miring (/) untuk pembagian, (3) Menggunakan simbol tanda silang (X) untuk perkalian, (4) Selalu diawali dengan tanda sama dengan (=) jika ingin membuat rumus otomatis. Pernyataan yang benar mengenai aturan penulisan rumus matematika di Excel ditunjukkan oleh nomor....",
+                options: [
+                    "1, 2, dan 4",
+                    "1, 3, dan 4",
+                    "2, 3, dan 4",
+                    "Semua benar"
+                ],
+                correct: 0,
+                explanation: "Di Excel, perkalian menggunakan tanda bintang (*), pembagian menggunakan garis miring (/), dan setiap rumus wajib diawali tanda sama dengan (=). Simbol 'X' tidak digunakan dalam formula Excel."
+            },
+            {
+                category: "Aplikasi Perkantoran (Excel)",
+                question: "Perhatikan kegiatan berikut: (1) Menghitung keuangan kas bulanan kelas secara otomatis menggunakan rumus, (2) Membuat tabel daftar nilai siswa, (3) Menulis cerita pendek berhalaman-halaman, (4) Menyajikan data penjualan barang dalam bentuk grafik atau diagram. Kegiatan yang paling tepat dilakukan menggunakan aplikasi pengolah data seperti Microsoft Excel adalah ....",
+                options: [
+                    "(1), (2), dan (4)",
+                    "(1), (3), dan (4)",
+                    "(2), (3), dan (4)",
+                    "Semua kegiatan benar"
+                ],
+                correct: 0,
+                explanation: "Microsoft Excel adalah aplikasi spreadsheet (pengolah angka) yang unggul dalam perhitungan otomatis menggunakan rumus, tabel data, serta pembuatan grafik/diagram. Menulis cerita panjang lebih tepat di Microsoft Word."
+            },
+            {
+                category: "Blog & Vlog (Media Digital)",
+                question: "Saat ini, informasi tidak hanya disebarkan melalui tulisan blog, tetapi juga melalui video di platform seperti YouTube atau TikTok yang sering disebut Vlog (Video Blog). Apa persamaan tujuan utama dari blog dan vlog, serta apa perbedaannya?",
+                options: [
+                    "Persamaannya sama-sama membagikan informasi atau karya kepada publik, perbedaannya terletak pada media utamanya (teks/gambar vs video).",
+                    "Persamaannya sama-sama alat untuk merusak komputer, perbedaannya di warna layarnya.",
+                    "Blog hanya untuk bermain game, sedangkan vlog untuk mengetik surat.",
+                    "Tidak ada persamaan sama sekali di antara keduanya."
+                ],
+                correct: 0,
+                explanation: "Baik blog maupun vlog bertujuan untuk menyampaikan informasi, ide, atau hiburan kepada audiens, namun blog berbasis teks dan artikel, sedangkan vlog berbasis konten video."
+            },
+            {
+                category: "Etika Media Sosial",
+                question: "Perhatikan tindakan-tindakan berikut di dunia maya: (1) Mengecek kebenaran sumber berita sebelum membagikannya ke grup WhatsApp, (2) Membagikan alamat rumah dan foto data diri secara detail di Instagram, (3) Menggunakan kata-kata yang sopan saat mengomentari karya orang lain, (4) Membuat akun palsu untuk menyindir teman yang tidak disukai. Tindakan yang mencerminkan etika bijak dan aman dalam menggunakan media sosial ditunjukkan oleh nomor....",
+                options: [
+                    "1 dan 3",
+                    "2 dan 4",
+                    "1 dan 4",
+                    "2 dan 3"
+                ],
+                correct: 0,
+                explanation: "Mengecek kebenaran berita (saring sebelum sharing) dan santun berkomentar adalah wujud etika digital yang baik. Membagikan data pribadi secara terbuka dan membuat akun palsu untuk menyindir sangat berbahaya serta tidak etis."
+            },
+            {
+                category: "Jejak Digital",
+                question: "Banyak remaja sering mengunggah status emosional, foto pribadi, atau komentar kasar di media sosial saat sedang marah, lalu menganggap masalah selesai setelah tombol 'Hapus' ditekan keesokan harinya. Berdasarkan pemahaman informatika mengenai jejak digital, mengapa tindakan tersebut sangat berbahaya bagi masa depan mereka?",
+                options: [
+                    "Karena data di internet dapat disalin, discreenshot, atau direkam oleh orang lain dan meninggalkan jejak permanen (digital footprint) yang sulit dihapus sepenuhnya.",
+                    "Karena tombol hapus di media sosial tidak berfungsi sama sekali.",
+                    "Because menghapus postingan justru membuat akun langsung diblokir permanen oleh pemerintah.",
+                    "Karena tidak ada orang yang peduli dengan apa yang diunggah remaja."
+                ],
+                correct: 0,
+                explanation: "Jejak digital bersifat abadi. Konten yang sudah diunggah, meskipun dihapus oleh pemiliknya, sering kali sudah discreenshot atau direkam oleh sistem server pihak lain dan dapat dilihat di masa depan (misalnya saat melamar pekerjaan)."
+            },
+            {
+                category: "Literasi Digital",
+                question: "Jelaskan dengan menggunakan bahasamu sendiri apa yang dimaksud dengan literasi digital, dan mengapa kemampuan ini sangat penting dimiliki oleh seorang pelajar di era modern saat ini!",
+                options: [
+                    "Kemampuan merakit komponen hardware komputer di pabrik elektronik.",
+                    "Kemampuan memahami, mengevaluasi, dan menggunakan informasi dari berbagai sumber digital secara bijak, kritis, dan bertanggung jawab.",
+                    "Keterampilan mengetik dengan kecepatan 100 kata per menit tanpa melihat keyboard.",
+                    "Keahlian membobol kata sandi akun media sosial orang lain."
+                ],
+                correct: 1,
+                explanation: "Literasi digital bukan sekadar bisa mengoperasikan perangkat, melainkan kecerdasan berpikir dalam menyaring informasi, menghindari hoax, serta menggunakan teknologi secara etis dan produktif."
+            },
+            {
+                category: "Pengguna Bijak Media Sosial",
+                question: "Maraknya kasus perundungan siber (cyberbullying), penyebaran berita bohong (hoax), dan penipuan online di media sosial sering kali bermula dari rendahnya kemampuan literasi digital di masyarakat. Sebagai seorang pelajar yang telah paham informatika, bagaimana sikap terbaik agar ia bisa menjadi pengguna media sosial yang bijak dan bertanggung jawab?",
+                options: [
+                    "Menerima dan menyebarkan semua berita sensasional agar viral di grup.",
+                    "Menerapkan prinsip 'Saring sebelum Sharing', berpikir kritis sebelum berkomentar, dan menghormati privasi orang lain.",
+                    "Menghapus semua aplikasi media sosial dan berhenti menggunakan internet selamanya.",
+                    "Membalas komentar kebencian dengan makian yang lebih tajam."
+                ],
+                correct: 1,
+                explanation: "Pelajar yang cerdas secara digital selalu memverifikasi informasi, menjaga etika komunikasi, dan tidak ikut menyebarkan kebencian atau berita palsu di ruang siber."
+            },
+            {
+                category: "Keamanan Akun & Password",
+                question: "Beni sering menggunakan tanggal lahirnya sebagai sandi (password) seluruh akun media sosial dan email pentingnya karena mudah diingat. Mengapa praktik pembuatan kata sandi seperti ini sangat tidak disarankan dari sudut pandang keamanan siber?",
+                options: [
+                    "Karena tanggal lahir mudah ditebak orang lain atau dibobol menggunakan teknik social engineering.",
+                    "Karena tanggal lahir membuat komputer menjadi cepat panas.",
+                    "Karena sistem internet melarang penggunaan angka.",
+                    "Karena password tanggal lahir akan otomatis terhapus setiap bulan."
+                ],
+                correct: 0,
+                explanation: "Menggunakan data pribadi yang mudah diketahui orang (seperti tanggal lahir) sebagai sandi sangat berisiko karena mudah ditebak dan dibobol peretas."
+            },
+            {
+                category: "Jaringan Komputer & Internet",
+                question: "Saat menghubungkan laptop ke jaringan Wi-Fi publik di kafe tanpa pengamanan, data yang dikirimkan berisiko disadap oleh pihak tidak bertanggung jawab. Protokol pengamanan apa yang paling penting untuk memastikan data terenkripsi saat mengakses situs web penting?",
+                options: [
+                    "Menggunakan protokol HTTPS (Hypertext Transfer Protocol Secure).",
+                    "Mematikan layar laptop saat terhubung ke Wi-Fi.",
+                    "Mengubah warna tema browser menjadi mode gelap.",
+                    "Mengganti mouse dengan touchpad."
+                ],
+                correct: 0,
+                explanation: "Protokol HTTPS mengenkripsi komunikasi antara browser pengguna dan server web, sehingga data penting seperti password atau pesan tidak mudah disadap di jaringan publik."
+            },
+            {
+                category: "Dampak Positif & Negatif Teknologi",
+                question: "Perkembangan Artificial Intelligence (AI) dan otomatisasi industri membawa banyak kemudahan, namun juga memicu kekhawatiran hilangnya beberapa jenis pekerjaan konvensional. Sebagai pelajar kelas 9, sikap paling bijak menghadapi perubahan teknologi ini adalah...",
+                options: [
+                    "Menolak kehadiran teknologi baru dan kembali ke cara manual sepenuhnya.",
+                    "Terus belajar, mengasah keterampilan digital, dan beradaptasi dengan pemanfaatan teknologi baru secara produktif.",
+                    "Meminta pemerintah melarang seluruh penggunaan komputer di sekolah.",
+                    "Mengabaikan perkembangan teknologi karena merasa tidak berdampak."
+                ],
+                correct: 1,
+                explanation: "Adaptasi dan pembelajaran berkelanjutan (lifelong learning) adalah kunci utama bagi generasi muda untuk menghadapi disrupsi teknologi di era modern."
+            },
+            {
+                category: "Pengolahan Presentasi",
+                question: "Siti diminta menyampaikan hasil proyek kelompok di depan kelas menggunakan proyektor. Fitur apa dalam aplikasi presentasi (PowerPoint) yang sebaiknya ia gunakan agar teks tidak menumpuk dan audiens dapat membaca materi dengan terstruktur?",
+                options: [
+                    "Membuat poin-poin (bullet points) ringkas per slide dengan visual yang proporsional.",
+                    "Menuliskan seluruh isi halaman buku teks ke dalam satu slide penuh.",
+                    "Menggunakan ukuran huruf sangat kecil agar muat banyak kalimat.",
+                    "Menghilangkan teks sama sekali dan hanya memasang gambar hitam putih."
+                ],
+                correct: 0,
+                explanation: "Presentasi yang efektif mengandalkan poin-poin ringkas dan visual yang bersih, bukan menjejali slide dengan paragraf panjang."
+            },
+            {
+                category: "Cloud Storage & Kolaborasi",
+                question: "Kelompok belajar Doni mengerjakan tugas laporan makalah bersama-sama secara daring (real-time) menggunakan Google Docs tanpa harus saling kirim file lewat flashdisk. Apakah keuntungan utama dari penggunaan penyimpanan awan (cloud storage) dan kolaborasi online ini?",
+                options: [
+                    "Memungkinkan banyak pengguna mengedit dokumen yang sama secara bersamaan dan mencegah risiko file hilang.",
+                    "Membuat kapasitas memori internal laptop menjadi cepat habis.",
+                    "Mengharuskan anggota kelompok bertemu fisik setiap malam.",
+                    "Mengubah format makalah menjadi file musik."
+                ],
+                correct: 0,
+                explanation: "Cloud storage dan tool kolaborasi online memudahkan kerja tim secara sinkron dari lokasi berbeda serta memastikan data tersimpan aman di server awan."
+            },
+            {
+                category: "Analisis Informasi & Hoax",
+                question: "Rina menerima pesan berantai di grup chat yang menyebutkan bahwa 'minum air es saat ujian bisa membuat otak membeku seketika'. Sebagai pelajar yang memiliki literasi digital, apa tindakan paling tepat yang harus dilakukan Rina?",
+                options: [
+                    "Langsung meneruskan pesan tersebut ke seluruh teman agar mereka waspada.",
+                    "Memeriksa kebenaran informasi melalui situs cek fakta resmi sebelum mempercayai atau membagikannya.",
+                    "Menghapus aplikasi chat selamanya karena banyak informasi berbahaya.",
+                    "Menganggap berita tersebut pasti benar karena dibagikan oleh orang dewasa."
+                ],
+                correct: 1,
+                explanation: "Sikap kritis terhadap informasi menuntut kita untuk selalu memverifikasi kebenaran berita melalui sumber tepercaya atau situs cek fakta sebelum menyebarkannya."
+            },
+            {
+                category: "Perangkat Keras & Jaringan",
+                question: "Perangkat keras jaringan manakah yang berfungsi sebagai pengatur rute (router) utama untuk menghubungkan jaringan lokal (LAN) rumah kita ke jaringan global internet?",
+                options: [
+                    "Modem/Router internet service provider",
+                    "Kabel mouse USB",
+                    "Speaker Bluetooth nirkabel",
+                    "Printer inkjet warna"
+                ],
+                correct: 0,
+                explanation: "Router atau modem adalah perangkat keras yang mengarahkan paket data antar jaringan lokal dan jaringan internet global."
+            },
+            {
+                category: "Algoritma & Pemrograman Dasar",
+                question: "Dalam pembuatan program komputer, sebuah struktur pengulangan (looping) digunakan ketika...",
+                options: [
+                    "Kita ingin menjalankan serangkaian instruksi secara berulang-ulang tanpa harus menulis kode yang sama berkali-kali.",
+                    "Kita ingin menghentikan total kerja komputer selamanya.",
+                    "Kita ingin menghapus seluruh file sistem operasi.",
+                    "Kita ingin memperlambat kinerja prosesor."
+                ],
+                correct: 0,
+                explanation: "Struktur pengulangan (looping) dalam pemrograman sangat efisien untuk mengeksekusi blok kode yang sama secara berulang sesuai kondisi tertentu."
+            },
+            {
+                category: "Etika & Hak Cipta Digital",
+                question: "Fahri mengunduh gambar pemandangan dari internet untuk tugas presentasi sekolahnya, lalu ia mencantumkan sumber pembuat asli gambar tersebut pada bagian daftar pustaka/catatan kaki. Tindakan Fahri mencerminkan sikap...",
+                options: [
+                    "Menghargai hak kekayaan intelektual dan menjunjung etika digital.",
+                    "Melanggar hukum hak cipta berat karena menggunakan gambar orang lain.",
+                    "Mencuri data pribadi pemilik gambar.",
+                    "Memalsukan dokumen resmi sekolah."
+                ],
+                correct: 0,
+                explanation: "Mencantumkan sumber atau atribusi saat menggunakan karya orang lain di internet adalah bentuk penghargaan terhadap hak cipta dan etika digital."
+            },
+            {
+                category: "Pemecahan Masalah Sistem",
+                question: "Ketika aplikasi pengolah kata di laptop tiba-tiba 'Not Responding' (macet total), langkah diagnostik awal yang paling aman dan logis dilakukan oleh pengguna adalah...",
+                options: [
+                    "Memukul bodi laptop dengan keras agar sistemnya pulih.",
+                    "Menutup paksa aplikasi melalui Task Manager atau melakukan restart perangkat dengan prosedur yang benar.",
+                    "Mencabut baterai dan membongkar komponen dalam laptop.",
+                    "Membiarkan laptop menyala berhari-hari tanpa tindakan."
+                ],
+                correct: 1,
+                explanation: "Menggunakan Task Manager untuk menutup aplikasi yang macet atau melakukan restart sistem adalah langkah penanganan masalah (troubleshooting) dasar yang efektif dan aman."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsScreen = document.getElementById('results-screen');
+        const progressBadge = document.getElementById('quiz-progress-badge');
+        
+        const qCounter = document.getElementById('q-counter');
+        const currentQNum = document.getElementById('current-q-num');
+        const totalQNum = document.getElementById('total-q-num');
+        const questionCategory = document.getElementById('question-category');
+        const questionText = document.getElementById('question-text');
+        const optionsList = document.getElementById('options-list');
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackHeader = document.getElementById('feedback-header');
+        const feedbackText = document.getElementById('feedback-text');
+        const finalScore = document.getElementById('final-score');
+        const scoreMessage = document.getElementById('score-message');
+
+        totalQNum.textContent = quizData.length;
+
+        function startQuiz() {
+            welcomeScreen.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            progressBadge.classList.remove('hidden');
+            currentQuestion = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            feedbackBox.classList.add('hidden');
+            
+            const q = quizData[currentQuestion];
+            qCounter.textContent = currentQuestion + 1;
+            currentQNum.textContent = currentQuestion + 1;
+            questionCategory.textContent = q.category;
+            questionText.textContent = q.question;
+
+            optionsList.innerHTML = '';
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-xl border border-emerald-200 bg-white hover:bg-emerald-50 active:bg-emerald-100 font-medium text-slate-700 text-sm sm:text-base transition-all flex items-center justify-between group cursor-pointer shadow-sm';
+                btn.innerHTML = `
+                    <span class="flex items-center space-x-3">
+                        <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs group-hover:bg-emerald-700 group-hover:text-white transition-colors flex-shrink-0">${String.fromCharCode(65 + index)}</span>
+                        <span>${option}</span>
+                    </span>
+                `;
+                btn.onclick = () => selectAnswer(index);
+                optionsList.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (answered) return;
+            answered = true;
+
+            const q = quizData[currentQuestion];
+            const buttons = optionsList.children;
+
+            if (selectedIndex === q.correct) {
+                score++;
+                buttons[selectedIndex].classList.remove('bg-white', 'hover:bg-emerald-50', 'border-emerald-200');
+                buttons[selectedIndex].classList.add('bg-emerald-50', 'border-emerald-600', 'text-emerald-950', 'shadow-inner');
+                
+                feedbackHeader.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">✓</div>
+                    <h4 class="font-bold text-emerald-900 text-base">Jawaban Kamu Benar! Luar Biasa!</h4>
+                `;
+            } else {
+                buttons[selectedIndex].classList.remove('bg-white', 'hover:bg-emerald-50', 'border-emerald-200');
+                buttons[selectedIndex].classList.add('bg-rose-50', 'border-rose-500', 'text-rose-950', 'shadow-inner');
+                
+                buttons[q.correct].classList.remove('bg-white', 'hover:bg-emerald-50', 'border-emerald-200');
+                buttons[q.correct].classList.add('bg-emerald-50', 'border-emerald-600', 'text-emerald-950', 'shadow-inner');
+
+                feedbackHeader.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold">✕</div>
+                    <h4 class="font-bold text-rose-900 text-base">Kurang Tepat, Perhatikan Ulasan Berikut:</h4>
+                `;
+            }
+
+            for (let btn of buttons) {
+                btn.style.pointerEvents = 'none';
+            }
+
+            feedbackText.textContent = q.explanation;
+            feedbackBox.classList.remove('hidden');
+            feedbackBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizContainer.classList.add('hidden');
+            progressBadge.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScore.textContent = score;
+
+            let msg = "";
+            const percentage = (score / quizData.length) * 100;
+            if (percentage >= 90) {
+                msg = "Sempurna! Pemikiran kritis dan literasi digitalmu sudah sangat matang dan luar biasa!";
+            } else if (percentage >= 75) {
+                msg = "Bagus sekali! Penguasaan materi TIK dan etika digitalmu sudah sangat baik.";
+            } else if (percentage >= 50) {
+                msg = "Cukup baik, namun perlu memperdalam kembali konsep etika digital dan aplikasi perkantoran.";
+            } else {
+                msg = "Ayo semangat belajar lagi! Pahami kembali ulasan materi TIK dan literasi digital ya.";
+            }
+            scoreMessage.textContent = msg;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
